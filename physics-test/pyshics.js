@@ -25,7 +25,6 @@ function updatePosition(obj){
     //update velocity
     obj.vx += obj.ax;
     obj.vy += obj.ay;
-    
     applyFriction(obj);
     
     //update position
@@ -36,12 +35,19 @@ function updatePosition(obj){
 //user interactivity
 
 var keys = [];
+var mouse = {};
+document.addEventListener('mousemove', function(e){
+    mouse.x = e.clientX - canvas.offsetLeft
+    mouse.y = e.clientY - canvas.offsetTop
+},false);
 document.addEventListener('keydown', function(e){
     keys[e.which] = true;
 });
 document.addEventListener('keyup', function(e){
     keys[e.which] = false;
 });
+
+
 
 function applyFriction(obj){
     var speed = Math.sqrt(obj.vx * obj.vx + obj.vy * obj.vy),
@@ -60,11 +66,13 @@ function applyFriction(obj){
     ctx.clearRect(0, 0, w, h);
     
     //rotation
-    if(keys[37]) spaceship.r -= 0.05;
-    if(keys[39]) spaceship.r += 0.05;
+    var dx = mouse.x - spaceship.x
+    var dy = mouse.y - spaceship.y
+    spaceship.r = Math.atan2(dy, dx);
+    
     
     //thrust
-    if(keys[38]){
+    if(keys[65]){
         spaceship.ax = Math.cos(spaceship.r) * 0.05;
         spaceship.ay = Math.sin(spaceship.r) * 0.05;
     }else{
