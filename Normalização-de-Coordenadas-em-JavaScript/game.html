@@ -1,0 +1,104 @@
+<html>
+
+<head>
+	<title>Normalização</title>
+	<script>
+		var canvas, context;
+		var imgBackGround;
+		var texture;
+		var rect = { x: 0, y: 0, width: 0.1, height: 0.1, color: 'rgb(0,200,200)', angle: 0 };
+		var screen = { x: 900, y: 450 };
+		var screenCenter = { x: screen.x / 2, y: screen.y / 2 };
+		var pivot = { x: 0.0, y: 0.0 };
+		var scaleVec = { x: 0, y: 0.0 };
+		var transVec = { x: 0, y: 0.0 };
+		var mouse = {}
+		var keys = []
+		var acceleration = {}
+		var velocity = {}
+		var direction = {}
+
+		function InitGame() {
+			velocity.x = velocity.y = 0
+			canvas = document.getElementById('Canvas');
+			context = canvas.getContext('2d');
+
+			imgBackGround = new Image();
+			imgBackGround.src = 'fundo.png';
+
+			setInterval(Loop, 1000 / 60);
+		}
+
+		function DrawRect(rect) {
+			pivot.x = screen.x * rect.width / 2;
+			pivot.y = screen.y * rect.height / 2;
+			scaleVec.x = screen.x * rect.width;
+			scaleVec.y = screen.y * rect.height;
+			transVec.x = screenCenter.x + screenCenter.x * rect.x - (scaleVec.x / 2);
+			transVec.y = screenCenter.y + screenCenter.y * (-rect.y) - (scaleVec.y / 2);
+			context.save();
+			context.translate(pivot.x, pivot.y);
+			context.translate(transVec.x, transVec.y);
+			physics()
+			context.rotate(-rect.angle);
+			context.translate(-pivot.x, -pivot.y);
+			context.fillStyle = rect.color;
+			context.fillRect(0, 0, scaleVec.x, scaleVec.y);
+			context.restore();
+		}
+
+		document.addEventListener('mousemove', function (e) {
+			mouse.x = e.clientX - canvas.offsetLeft
+			mouse.y = e.clientY - canvas.offsetTop
+		}, false);
+
+		document.addEventListener('keydown', function (e) {
+			keys[e.which] = true;
+		});
+		document.addEventListener('keyup', function (e) {
+			keys[e.which] = false;
+		});
+		function physics() {
+			velocity.x += acceleration.x
+			velocity.y += acceleration.y
+			rect.x += (velocity.x * 0.01)
+			rect.y += (velocity.y * 0.01)
+			// console.log(rect.x)
+		}
+
+		function toNormalize(p_coordX, p_coordY){
+			let coord = {}
+			coord.x = (( (  p_coordX / canvas.width ) * 2) - 1).toPrecision(10);
+			coord.y = (( (  p_coordY / - canvas.height + 1) * 2 - 1)).toPrecision(10);
+			// console.log(coord.x)
+			return coord
+		}
+
+		function Loop() {
+			context.drawImage(imgBackGround, 0, 0);
+			let n1 = (0.2+0.1)
+			let n2 = n1.toPrecision(10)
+			// console.log(n2)
+			direction.x = toNormalize(mouse.x, mouse.y).x
+			direction.y = toNormalize(mouse.x, mouse.y).y
+			
+			rect.angle = Math.atan2(direction.y, direction.x)
+			if (keys[65]){
+				console.log(rect.angle)
+				acceleration.x = Math.cos(rect.angle) * 0.005
+				acceleration.y = Math.sin(rect.angle) * 0.005
+			}else{acceleration.x = acceleration.y = 0}
+			DrawRect(rect);
+
+		}
+
+	</script>
+</head>
+
+<body onload="InitGame()">
+	<canvas id="Canvas" width="900" height="450">
+		Seu canvas não é suportado.
+	</canvas>
+</body>
+
+</html>
