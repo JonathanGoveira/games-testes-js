@@ -7,7 +7,7 @@
 		var texture;
 		var proporcao = 0
 		var rect = { x: 0, y: 0, width: 0.02, height: 0.02, color: 'rgb(0,200,200)', angle: 0 };
-		var screen = { x: 900, y: 600 };
+		var screen = { x: 900, y: 800, AR: function(){return this.x / this.y} };
 		var screenCenter = { x: screen.x / 2, y: screen.y / 2 };
 		var pivot = { x: 0.0, y: 0.0 };
 		var scaleVec = { x: 0, y: 0.0 };
@@ -17,6 +17,7 @@
 		var acceleration = {}
 		var velocity = {}
 		var direction = {}
+		var player = {}
 
 		function InitGame() {
 			velocity.x = velocity.y = 0
@@ -83,8 +84,10 @@
 			// console.log(n2)
 			direction.x = toNormalize(mouse.x, mouse.y).x
 			direction.y = toNormalize(mouse.x, mouse.y).y
+			player.x = rect.x - direction.x
+			player.y = rect.y - direction.y
 			
-			rect.angle = Math.atan2(direction.y, direction.x * proporcao)
+			rect.angle = Math.atan2(-player.y, -player.x * proporcao)
 			if (keys[65]){
 				console.log(rect.angle)
 				acceleration.x = Math.cos(rect.angle) * 0.005
@@ -97,7 +100,7 @@
 	</script>
 </head>
 <body onload="InitGame()">
-	<canvas id="Canvas" width="900" height="600">
+	<canvas id="Canvas" width="900" height="800">
 		Seu canvas não é suportado.
 	</canvas>
 	
