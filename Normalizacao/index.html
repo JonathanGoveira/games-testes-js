@@ -4,10 +4,9 @@
 	<title>Normalização</title>
 	<script>
 		var canvas, context;
-		var imgBackGround;
 		var texture;
-		var rect = { x: 0, y: 0, width: 0.1, height: 0.1, color: 'rgb(0,200,200)', angle: 0 };
-		var screen = { x: 900, y: 450 };
+		var rect = { x: 0, y: 0, width: 0.02, height: 0.02, color: 'rgb(0,200,200)', angle: 0 };
+		var screen = { x: 900, y: 600 };
 		var screenCenter = { x: screen.x / 2, y: screen.y / 2 };
 		var pivot = { x: 0.0, y: 0.0 };
 		var scaleVec = { x: 0, y: 0.0 };
@@ -75,7 +74,8 @@
 		}
 
 		function Loop() {
-			context.drawImage(imgBackGround, 0, 0);
+			context.fillStyle = "black"
+			context.fillRect (0,0,canvas.width, canvas.height)
 			let n1 = (0.2+0.1)
 			let n2 = n1.toPrecision(10)
 			// console.log(n2)
@@ -94,11 +94,11 @@
 
 	</script>
 </head>
-
 <body onload="InitGame()">
-	<canvas id="Canvas" width="900" height="450">
+	<canvas id="Canvas" width="900" height="600">
 		Seu canvas não é suportado.
 	</canvas>
+	
 </body>
 
 </html>
