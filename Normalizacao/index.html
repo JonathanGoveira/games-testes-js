@@ -5,6 +5,7 @@
 	<script>
 		var canvas, context;
 		var texture;
+		var proporcao = 0
 		var rect = { x: 0, y: 0, width: 0.02, height: 0.02, color: 'rgb(0,200,200)', angle: 0 };
 		var screen = { x: 900, y: 600 };
 		var screenCenter = { x: screen.x / 2, y: screen.y / 2 };
@@ -21,6 +22,7 @@
 			velocity.x = velocity.y = 0
 			canvas = document.getElementById('Canvas');
 			context = canvas.getContext('2d');
+			proporcao = canvas.width / canvas.height
 
 			imgBackGround = new Image();
 			imgBackGround.src = 'fundo.png';
@@ -82,7 +84,7 @@
 			direction.x = toNormalize(mouse.x, mouse.y).x
 			direction.y = toNormalize(mouse.x, mouse.y).y
 			
-			rect.angle = Math.atan2(direction.y, direction.x)
+			rect.angle = Math.atan2(direction.y, direction.x * proporcao)
 			if (keys[65]){
 				console.log(rect.angle)
 				acceleration.x = Math.cos(rect.angle) * 0.005
