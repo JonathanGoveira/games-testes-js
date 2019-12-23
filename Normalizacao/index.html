@@ -6,31 +6,33 @@
 		var canvas, context;
 		var texture;
 		var proporcao = 0
-		var rect = { x: 0, y: 0, width: 0.02, height: 0.02, color: 'rgb(0,200,200)', angle: 0 };
-		var screen = { x: 900, y: 800, AR: function(){return this.x / this.y} };
+		var rect = { 
+			x: 0, y: 0,
+			distanceX: 0, distanceY: 0,
+			velocityX: 0, velocitY: 0,
+			accelerationX: 0, accelerationY: 0,
+			angle: 0,
+			width: 0.02, height: 0.02, 
+			color: 'rgb(0,200,200)'
+		};
+		var screen = { x: 900, y: 600, AR: function () { return this.x / this.y } };
 		var screenCenter = { x: screen.x / 2, y: screen.y / 2 };
 		var pivot = { x: 0.0, y: 0.0 };
 		var scaleVec = { x: 0, y: 0.0 };
 		var transVec = { x: 0, y: 0.0 };
 		var mouse = {}
 		var keys = []
-		var acceleration = {}
-		var velocity = {}
-		var direction = {}
 		var player = {}
+		var friction = 0.001
 
 		function InitGame() {
-			velocity.x = velocity.y = 0
 			canvas = document.getElementById('Canvas');
 			context = canvas.getContext('2d');
 			proporcao = canvas.width / canvas.height
 
-			imgBackGround = new Image();
-			imgBackGround.src = 'fundo.png';
-
 			setInterval(Loop, 1000 / 60);
 		}
-
+		// Função de desenho com o canvas normalizado
 		function DrawRect(rect) {
 			pivot.x = screen.x * rect.width / 2;
 			pivot.y = screen.y * rect.height / 2;
@@ -48,7 +50,17 @@
 			context.fillRect(0, 0, scaleVec.x, scaleVec.y);
 			context.restore();
 		}
-
+		// Função principal de fisica, onde aplica a aceleração
+		function physics() {
+			rect.velocityX += rect.accelerationX
+			rect.velocitY += rect.accelerationY
+			
+			applyFriction()
+			rect.x += (rect.velocityX * 0.01)
+			rect.y += (rect.velocitY * 0.01)
+		
+		}
+		// inputs do usuário
 		document.addEventListener('mousemove', function (e) {
 			mouse.x = e.clientX - canvas.offsetLeft
 			mouse.y = e.clientY - canvas.offsetTop
@@ -60,50 +72,57 @@
 		document.addEventListener('keyup', function (e) {
 			keys[e.which] = false;
 		});
-		function physics() {
-			velocity.x += acceleration.x
-			velocity.y += acceleration.y
-			rect.x += (velocity.x * 0.01)
-			rect.y += (velocity.y * 0.01)
-			// console.log(rect.x)
-		}
+		// Função de fricção, onde indetifica se a velocidade é maior que a fricção, caso seja ele desacelera a velocidade, até chegar em zero
+		// e o objeto parar de se mover
+		function applyFriction() {
+			var speed = Math.sqrt(rect.velocityX * rect.velocityX + rect.velocitY * rect.velocitY)
+			var angle = Math.atan2(rect.velocitY, rect.velocityX);
 
-		function toNormalize(p_coordX, p_coordY){
+			if (speed > friction) {
+				// 1.5 é pra aumentar o valor da fricção e fazer o objeto freiar mais rapído
+				speed -= (friction * 1.5);
+			} else {
+				speed = 0;
+			}
+			// caso o speed seja 0, ou seja ele chegou no valor da fricção, então a velocidade recebe 0 tbm
+			rect.velocityX = Math.cos(angle) * speed;
+			rect.velocitY = Math.sin(angle) * speed;
+			
+		}
+		// Função para normalizar, usada nesse caso para normalizar as coordenadas do mouse
+		function toNormalize(p_coordX, p_coordY) {
 			let coord = {}
-			coord.x = (( (  p_coordX / canvas.width ) * 2) - 1).toPrecision(10);
-			coord.y = (( (  p_coordY / - canvas.height + 1) * 2 - 1)).toPrecision(10);
-			// console.log(coord.x)
+			coord.x = (((p_coordX / canvas.width) * 2) - 1).toPrecision(10);
+			coord.y = (((p_coordY / - canvas.height + 1) * 2 - 1)).toPrecision(10);
 			return coord
 		}
-
+		// loop principal do jogo
 		function Loop() {
 			context.fillStyle = "black"
-			context.fillRect (0,0,canvas.width, canvas.height)
-			let n1 = (0.2+0.1)
-			let n2 = n1.toPrecision(10)
-			// console.log(n2)
-			direction.x = toNormalize(mouse.x, mouse.y).x
-			direction.y = toNormalize(mouse.x, mouse.y).y
-			player.x = rect.x - direction.x
-			player.y = rect.y - direction.y
+			context.fillRect(0, 0, canvas.width, canvas.height)
 			
+			rect.distanceX = toNormalize(mouse.x, mouse.y).x
+			rect.distanceY = toNormalize(mouse.x, mouse.y).y
+			player.x = rect.x - rect.distanceX
+			player.y = rect.y - rect.distanceY
+
 			rect.angle = Math.atan2(-player.y, -player.x * proporcao)
-			if (keys[65]){
-				console.log(rect.angle)
-				acceleration.x = Math.cos(rect.angle) * 0.005
-				acceleration.y = Math.sin(rect.angle) * 0.005
-			}else{acceleration.x = acceleration.y = 0}
+			if (keys[65]) {
+				rect.accelerationX = Math.cos(rect.angle) * 0.005
+				rect.accelerationY = Math.sin(rect.angle) * 0.005
+			} else { rect.accelerationX = rect.accelerationY = 0 }
 			DrawRect(rect);
 
 		}
 
 	</script>
 </head>
+
 <body onload="InitGame()">
-	<canvas id="Canvas" width="900" height="800">
+	<canvas id="Canvas" width="900" height="600">
 		Seu canvas não é suportado.
 	</canvas>
-	
+
 </body>
 
 </html>
