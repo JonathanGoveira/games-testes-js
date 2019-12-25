@@ -94,7 +94,7 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\nclass Canvas2D_Singleton{\n\n    constructor(){\n        this._canvas = document.getElementById('canvas');\n        this._context = canvas.getContext('2d');\n        this._canvas.width = window.innerWidth;\n        this._canvas.height = window.innerHeight;\n    }\n\n    get context(){\n        return this._context\n    }\n    get canvas(){\n        return this._canvas;\n    }\n    get canvasWidth(){\n        return this._canvas.width;\n    }\n    get canvasHeight(){\n        return this._canvas.height;\n    }\n    rect(){\n        this._context.fillStyle = \"blue\";\n        this._context.fillRect(0,0,50,50)\n    }\n}\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (canvas = new Canvas2D_Singleton());\n\n\n//# sourceURL=webpack:///./src/canvas.js?");
+eval("__webpack_require__.r(__webpack_exports__);\nclass Canvas2D_Singleton{\n\n    constructor(){\n        this._canvas = document.getElementById('canvas');\n        this._context = canvas.getContext('2d');\n        this._canvas.width = window.innerWidth;\n        this._canvas.height = window.innerHeight;\n    }\n\n    draw(rect){\n        \n    }\n    // Getters and Setters\n    get context(){\n        return this._context\n    }\n    get canvas(){\n        return this._canvas;\n    }\n    get canvasWidth(){\n        return this._canvas.width;\n    }\n    get canvasHeight(){\n        return this._canvas.height;\n    }\n}\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (canvas = new Canvas2D_Singleton());\n\n\n//# sourceURL=webpack:///./src/canvas.js?");
 
 /***/ }),
 
@@ -118,7 +118,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _can
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return Player; });\n/* harmony import */ var _utils_vector2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/vector2 */ \"./src/utils/vector2.js\");\n\n\nclass Player{\n    constructor(){\n        this._position = new _utils_vector2__WEBPACK_IMPORTED_MODULE_0__[\"default\"](50,50)\n        console.log(this._position.x)\n    }\n\n    draw(context){\n        context.fillStyle = \"blue\"\n        context.fillRect(0,0,this._position.x, this._position.y)\n    }\n}\n\n//# sourceURL=webpack:///./src/objects/player.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return Player; });\n/* harmony import */ var _utils_vector2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/vector2 */ \"./src/utils/vector2.js\");\n\n\nclass Player{\n    constructor(){\n        this._position = new _utils_vector2__WEBPACK_IMPORTED_MODULE_0__[\"default\"](50,50);\n        this._distance = new _utils_vector2__WEBPACK_IMPORTED_MODULE_0__[\"default\"](0,0);\n        this._velocity = new _utils_vector2__WEBPACK_IMPORTED_MODULE_0__[\"default\"](0,0);\n        this._acceleration = new _utils_vector2__WEBPACK_IMPORTED_MODULE_0__[\"default\"](0,0);\n        this._angle = 0;\n        this._width = 0.2; this._height = 0.2;\n        this._color = \"rgb(0,200,200)\"\n    }\n\n    draw(context){\n        context.fillStyle = this._color\n        context.fillRect(this._position.x,this._position.y,50,50)\n    }\n}\n\n//# sourceURL=webpack:///./src/objects/player.js?");
 
 /***/ }),
 
@@ -130,7 +130,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return Vector2; });\nclass Vector2{\n    constructor(p_x,p_y){\n        this._x = p_x;\n        this._y = p_y;\n    }\n\n    get x(){\n        return this._x;\n    }\n    get y(){\n        return this._y;\n    }\n\n    set x(p_x){\n        this._x = p_x\n    }\n\n    set y(p_y){\n        this._y = p_y;\n    }\n}\n\n//# sourceURL=webpack:///./src/utils/vector2.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return Vector2; });\nclass Vector2{\n    constructor(p_x,p_y){\n        this._x = p_x;\n        this._y = p_y;\n    }\n    \n    zero(){\n        this._x = 0;\n        this._y = 0;\n    }\n    // Getters and Setters\n    get x(){\n        return this._x;\n    }\n    get y(){\n        return this._y;\n    }\n\n    set x(p_x){\n        this._x = p_x\n    }\n\n    set y(p_y){\n        this._y = p_y;\n    }\n}\n\n//# sourceURL=webpack:///./src/utils/vector2.js?");
 
 /***/ })
 

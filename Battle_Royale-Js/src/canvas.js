@@ -7,6 +7,10 @@ class Canvas2D_Singleton{
         this._canvas.height = window.innerHeight;
     }
 
+    draw(rect){
+        
+    }
+    // Getters and Setters
     get context(){
         return this._context
     }
@@ -18,10 +22,6 @@ class Canvas2D_Singleton{
     }
     get canvasHeight(){
         return this._canvas.height;
-    }
-    rect(){
-        this._context.fillStyle = "blue";
-        this._context.fillRect(0,0,50,50)
     }
 }
 
