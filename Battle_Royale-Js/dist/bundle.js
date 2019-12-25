@@ -86,14 +86,51 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./src/canvas.js":
+/*!***********************!*\
+  !*** ./src/canvas.js ***!
+  \***********************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\nclass Canvas2D_Singleton{\n\n    constructor(){\n        this._canvas = document.getElementById('canvas');\n        this._context = canvas.getContext('2d');\n        this._canvas.width = window.innerWidth;\n        this._canvas.height = window.innerHeight;\n    }\n\n    get context(){\n        return this._context\n    }\n    get canvas(){\n        return this._canvas;\n    }\n    get canvasWidth(){\n        return this._canvas.width;\n    }\n    get canvasHeight(){\n        return this._canvas.height;\n    }\n    rect(){\n        this._context.fillStyle = \"blue\";\n        this._context.fillRect(0,0,50,50)\n    }\n}\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (canvas = new Canvas2D_Singleton());\n\n\n//# sourceURL=webpack:///./src/canvas.js?");
+
+/***/ }),
+
 /***/ "./src/game.js":
 /*!*********************!*\
   !*** ./src/game.js ***!
   \*********************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-eval("\n(function Main(){\n    var canvas, context\n    canvas = document.getElementById('canvas');\n    context = canvas.getContext('2d')\n    canvas.width = window.innerWidth-2;\n    canvas.height = window.innerHeight - 2;\n}());\n\n//# sourceURL=webpack:///./src/game.js?");
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _canvas__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./canvas */ \"./src/canvas.js\");\n/* harmony import */ var _objects_player__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./objects/player */ \"./src/objects/player.js\");\n\n\n\n(function Init(){\n    \n    _canvas__WEBPACK_IMPORTED_MODULE_0__[\"default\"]\n    const player = new _objects_player__WEBPACK_IMPORTED_MODULE_1__[\"default\"]();\n    player.draw(_canvas__WEBPACK_IMPORTED_MODULE_0__[\"default\"].context)\n    \n}())\n\n//# sourceURL=webpack:///./src/game.js?");
+
+/***/ }),
+
+/***/ "./src/objects/player.js":
+/*!*******************************!*\
+  !*** ./src/objects/player.js ***!
+  \*******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return Player; });\n/* harmony import */ var _utils_vector2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/vector2 */ \"./src/utils/vector2.js\");\n\n\nclass Player{\n    constructor(){\n        this._position = new _utils_vector2__WEBPACK_IMPORTED_MODULE_0__[\"default\"](50,50)\n        console.log(this._position.x)\n    }\n\n    draw(context){\n        context.fillStyle = \"blue\"\n        context.fillRect(0,0,this._position.x, this._position.y)\n    }\n}\n\n//# sourceURL=webpack:///./src/objects/player.js?");
+
+/***/ }),
+
+/***/ "./src/utils/vector2.js":
+/*!******************************!*\
+  !*** ./src/utils/vector2.js ***!
+  \******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return Vector2; });\nclass Vector2{\n    constructor(p_x,p_y){\n        this._x = p_x;\n        this._y = p_y;\n    }\n\n    get x(){\n        return this._x;\n    }\n    get y(){\n        return this._y;\n    }\n\n    set x(p_x){\n        this._x = p_x\n    }\n\n    set y(p_y){\n        this._y = p_y;\n    }\n}\n\n//# sourceURL=webpack:///./src/utils/vector2.js?");
 
 /***/ })
 
