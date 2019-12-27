@@ -94,7 +94,7 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\nclass Canvas2D_Singleton{\n\n    constructor(){\n        this._canvas = document.getElementById('canvas');\n        this._context = canvas.getContext('2d');\n        this._canvas.width = window.innerWidth;\n        this._canvas.height = window.innerHeight;\n    }\n\n    draw(rect){\n        \n    }\n    // Getters and Setters\n    get context(){\n        return this._context\n    }\n    get canvas(){\n        return this._canvas;\n    }\n    get canvasWidth(){\n        return this._canvas.width;\n    }\n    get canvasHeight(){\n        return this._canvas.height;\n    }\n}\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (canvas = new Canvas2D_Singleton());\n\n\n//# sourceURL=webpack:///./src/canvas.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _utils_vector2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils/vector2 */ \"./src/utils/vector2.js\");\n\n\nclass Canvas2D_Singleton{\n\n    constructor(){\n        this._canvas = document.getElementById('canvas');\n        this._context = canvas.getContext('2d');\n        this._canvas.width = window.innerWidth;\n        this._canvas.height = window.innerHeight;\n        this._pivot = new _utils_vector2__WEBPACK_IMPORTED_MODULE_0__[\"default\"](0,0);\n        this._scaleVector = new _utils_vector2__WEBPACK_IMPORTED_MODULE_0__[\"default\"](0,0);\n        this._translateVector = new _utils_vector2__WEBPACK_IMPORTED_MODULE_0__[\"default\"](0,0);\n        this._screenCenter = new _utils_vector2__WEBPACK_IMPORTED_MODULE_0__[\"default\"](this._canvas.width/2,this._canvas.height/2);\n    }\n\n    draw(rect){\n        this._pivot.x = this._canvas.width * rect.width/2;\n        this._pivot.y = this._canvas.height * rect.height/2;\n        this._scaleVector.x = this._canvas.width * rect.width;\n        this._scaleVector.y = this._canvas.height * rect.height;\n        this._translateVector.x = this._screenCenter.x + this._screenCenter.x * rect.x - (this._scaleVector.x / 2);\n        this._translateVector.y = this._screenCenter.y + this._screenCenter.y * (-rect.y) - (this._scaleVector.y / 2);\n        this._context.save();\n        this._context.translate(this._pivot.x, this._pivot.y);\n        this._context.translate(this._translateVector.x, this._translateVector.y);\n        rect.update();\n        this._context.rotate(-rect.angle());\n        this._context.translate(-this._pivot.x, -this._pivot.y)\n        this._context.fillStyle = rect.color;\n        this._context.fillRect(0,0,this._scaleVector.x, this._scaleVector.y);\n        this._context.restore();\n\n    }\n    clear(){\n        this._context.fillStyle = \"black\";\n        this._context.fillRect(0,0,this.width, this.height)\n    }\n    // Getters and Setters\n    get context(){return this._context};\n    get canvas(){return this._canvas};\n    get width(){return this._canvas.width};\n    get height(){return this._canvas.height};\n}\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (canvas = new Canvas2D_Singleton());\n\n\n//# sourceURL=webpack:///./src/canvas.js?");
 
 /***/ }),
 
@@ -106,7 +106,31 @@ eval("__webpack_require__.r(__webpack_exports__);\nclass Canvas2D_Singleton{\n\n
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _canvas__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./canvas */ \"./src/canvas.js\");\n/* harmony import */ var _objects_player__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./objects/player */ \"./src/objects/player.js\");\n\n\n\n(function Init(){\n    \n    _canvas__WEBPACK_IMPORTED_MODULE_0__[\"default\"]\n    const player = new _objects_player__WEBPACK_IMPORTED_MODULE_1__[\"default\"]();\n    player.draw(_canvas__WEBPACK_IMPORTED_MODULE_0__[\"default\"].context)\n    \n}())\n\n//# sourceURL=webpack:///./src/game.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _canvas__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./canvas */ \"./src/canvas.js\");\n/* harmony import */ var _objects_player__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./objects/player */ \"./src/objects/player.js\");\n/* harmony import */ var _inputs_keyboard_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./inputs/keyboard.js */ \"./src/inputs/keyboard.js\");\n/* harmony import */ var _inputs_mouse__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./inputs/mouse */ \"./src/inputs/mouse.js\");\n\n\n\n\n\nconst player = new _objects_player__WEBPACK_IMPORTED_MODULE_1__[\"default\"]();\n(function Init(){\n    setInterval(Loop,1000/60)\n}())\n\nfunction Loop(){\n    \n    _canvas__WEBPACK_IMPORTED_MODULE_0__[\"default\"].clear();\n    _canvas__WEBPACK_IMPORTED_MODULE_0__[\"default\"].draw(player);\n}\n\n//# sourceURL=webpack:///./src/game.js?");
+
+/***/ }),
+
+/***/ "./src/inputs/keyboard.js":
+/*!********************************!*\
+  !*** ./src/inputs/keyboard.js ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n\nclass KeyBoard_Singleton{\n    constructor(){\n        this._keys=[]\n        for(let i=0;i<255;i++){\n            this._keys[i] = false\n        }\n        document.addEventListener('keydown', (e) => {this.keyDown(e)})\n        document.addEventListener('keyup', (e) => {this.keyUp(e)})\n    }\n\n    keyDown(e){\n        this._keys[e.keyCode] = true\n    }\n    keyUp(e){\n        this._keys[e.keyCode] = false\n    }\n    keyPress(keyCode){\n        return this._keys[keyCode];\n    }\n}\nconst keyboard_Singleton = new KeyBoard_Singleton();\n/* harmony default export */ __webpack_exports__[\"default\"] = (keyboard_Singleton);\n\n\n//# sourceURL=webpack:///./src/inputs/keyboard.js?");
+
+/***/ }),
+
+/***/ "./src/inputs/mouse.js":
+/*!*****************************!*\
+  !*** ./src/inputs/mouse.js ***!
+  \*****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _utils_vector2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/vector2 */ \"./src/utils/vector2.js\");\n/* harmony import */ var _utils_math__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/math */ \"./src/utils/math.js\");\n\n//import canvas from \"../canvas\";\n\n\nclass Mouse_Singleton{\n    constructor(){\n        this._position = new _utils_vector2__WEBPACK_IMPORTED_MODULE_0__[\"default\"](0,0);\n        document.addEventListener('mousemove', (e) =>{this.move(e)})\n    }\n\n    move(e){\n\n        //canvas.offsetLeft e canvas.offsetTop não estão funcionando\n        this._position.x = e.clientX\n        this._position.y = e.clientY\n        //console.log(e.clientX)\n    }\n    get x(){return _utils_math__WEBPACK_IMPORTED_MODULE_1__[\"default\"].toNormalize(this._position.x, this._position.y).x}\n    get y(){return _utils_math__WEBPACK_IMPORTED_MODULE_1__[\"default\"].toNormalize(this._position.x, this._position.y).y}\n}\nconst mouse_Singleton = new Mouse_Singleton();\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (mouse_Singleton);\n\n//# sourceURL=webpack:///./src/inputs/mouse.js?");
 
 /***/ }),
 
@@ -118,7 +142,19 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _can
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return Player; });\n/* harmony import */ var _utils_vector2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/vector2 */ \"./src/utils/vector2.js\");\n\n\nclass Player{\n    constructor(){\n        this._position = new _utils_vector2__WEBPACK_IMPORTED_MODULE_0__[\"default\"](50,50);\n        this._distance = new _utils_vector2__WEBPACK_IMPORTED_MODULE_0__[\"default\"](0,0);\n        this._velocity = new _utils_vector2__WEBPACK_IMPORTED_MODULE_0__[\"default\"](0,0);\n        this._acceleration = new _utils_vector2__WEBPACK_IMPORTED_MODULE_0__[\"default\"](0,0);\n        this._angle = 0;\n        this._width = 0.2; this._height = 0.2;\n        this._color = \"rgb(0,200,200)\"\n    }\n\n    draw(context){\n        context.fillStyle = this._color\n        context.fillRect(this._position.x,this._position.y,50,50)\n    }\n}\n\n//# sourceURL=webpack:///./src/objects/player.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return Player; });\n/* harmony import */ var _utils_vector2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/vector2 */ \"./src/utils/vector2.js\");\n/* harmony import */ var _inputs_mouse__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../inputs/mouse */ \"./src/inputs/mouse.js\");\n/* harmony import */ var _canvas__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../canvas */ \"./src/canvas.js\");\n/* harmony import */ var _inputs_keyboard__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../inputs/keyboard */ \"./src/inputs/keyboard.js\");\n\n\n\n\n\nclass Player{\n    constructor(){\n        this._position = new _utils_vector2__WEBPACK_IMPORTED_MODULE_0__[\"default\"](0,0);\n        this._distance = new _utils_vector2__WEBPACK_IMPORTED_MODULE_0__[\"default\"](0,0);\n        this._velocity = new _utils_vector2__WEBPACK_IMPORTED_MODULE_0__[\"default\"](0,0);\n        this._acceleration = new _utils_vector2__WEBPACK_IMPORTED_MODULE_0__[\"default\"](0,0);\n        this._angle = 0;\n        this._width = 0.05; this._height = 0.05;\n        this._color = \"rgb(0,200,200)\"\n        this._proporcao = _canvas__WEBPACK_IMPORTED_MODULE_2__[\"default\"].width / _canvas__WEBPACK_IMPORTED_MODULE_2__[\"default\"].height\n    }\n    // Getters\n    get x(){return this._position.x};\n    get y(){return this._position.y};\n    get width(){return this._width};\n    get height(){return this._height};\n    get color(){return this._color}\n    // Setters\n    set x(p_x){this._position.x = p_x};\n    set y(p_y){this._position.y = p_y};\n\n    distanceX(){return (this._position.x - _inputs_mouse__WEBPACK_IMPORTED_MODULE_1__[\"default\"].x)}\n    distanceY(){return (this._position.y - _inputs_mouse__WEBPACK_IMPORTED_MODULE_1__[\"default\"].y)}\n\n    updateAngle(){\n        this._angle = Math.atan2(-this.distanceY(), -this.distanceX() * this._proporcao)\n    }\n\n    angle(){return this._angle}\n\n    input(){\n        if(_inputs_keyboard__WEBPACK_IMPORTED_MODULE_3__[\"default\"].keyPress(65)){\n            this._acceleration.x = Math.cos(this.angle()) * 0.005\n            this._acceleration.y = Math.sin(this.angle()) * 0.005\n        }else{this._acceleration.x = this._acceleration.y = 0}\n    }\n\n    physicsUpdate(){\n        this._velocity.x += this._acceleration.x;\n        this._velocity.y += this._acceleration.y;\n\n        this._position.x += (this._velocity.x * 0.01);\n        this._position.y += (this._velocity.y * 0.01);\n    }\n    \n    update(){\n        this.updateAngle();\n        this.input();\n        this.physicsUpdate();\n    }\n   \n}\n\n//# sourceURL=webpack:///./src/objects/player.js?");
+
+/***/ }),
+
+/***/ "./src/utils/math.js":
+/*!***************************!*\
+  !*** ./src/utils/math.js ***!
+  \***************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _vector2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./vector2 */ \"./src/utils/vector2.js\");\n/* harmony import */ var _canvas__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../canvas */ \"./src/canvas.js\");\n\n\n\nclass Math{\n    constructor(){this._coordinate = new _vector2__WEBPACK_IMPORTED_MODULE_0__[\"default\"](0,0)}\n    toNormalize(p_x, p_y){\n        this._coordinate.x = (((p_x / _canvas__WEBPACK_IMPORTED_MODULE_1__[\"default\"].width) * 2) - 1).toPrecision(16);\n        this._coordinate.y = (((p_y / - _canvas__WEBPACK_IMPORTED_MODULE_1__[\"default\"].height  + 1) * 2 -1)).toPrecision(16);\n        return this._coordinate\n    }\n    get x(){\n        return this._coordinate.x\n    }\n}\n\nconst math_Singleton = new Math();\n/* harmony default export */ __webpack_exports__[\"default\"] = (math_Singleton);\n\n//# sourceURL=webpack:///./src/utils/math.js?");
 
 /***/ }),
 
@@ -130,7 +166,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return Vector2; });\nclass Vector2{\n    constructor(p_x,p_y){\n        this._x = p_x;\n        this._y = p_y;\n    }\n    \n    zero(){\n        this._x = 0;\n        this._y = 0;\n    }\n    // Getters and Setters\n    get x(){\n        return this._x;\n    }\n    get y(){\n        return this._y;\n    }\n\n    set x(p_x){\n        this._x = p_x\n    }\n\n    set y(p_y){\n        this._y = p_y;\n    }\n}\n\n//# sourceURL=webpack:///./src/utils/vector2.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return Vector2; });\nclass Vector2{\n    constructor(p_x,p_y){\n        this._x = p_x;\n        this._y = p_y;\n    }\n    \n    zero(){\n        this._x = 0;\n        this._y = 0;\n    }\n    // Getters\n    get x(){return this._x;}\n    get y(){return this._y;}\n    // Setters\n    set x(p_x){this._x = p_x}\n    set y(p_y){this._y = p_y;}\n}\n\n//# sourceURL=webpack:///./src/utils/vector2.js?");
 
 /***/ })
 

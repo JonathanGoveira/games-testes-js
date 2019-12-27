@@ -2,11 +2,11 @@ const path = require('path');
 
 module.exports = {
   entry: './src/game.js',
-  mode: 'production',
+  mode: 'development',
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.tsx?$/, use: 'raw-loader',
         exclude: /node_modules/
       }
     ]
