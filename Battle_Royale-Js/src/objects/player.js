@@ -10,7 +10,7 @@ export default class Player{
         this._velocity = new Vector2(0,0);
         this._acceleration = new Vector2(0,0);
         this._angle = 0;
-        this._width = 0.05; this._height = 0.05;
+        this._width = 0.02; this._height = 0.02;
         this._color = "rgb(0,200,200)"
         this._proporcao = canvas.width / canvas.height
     }
