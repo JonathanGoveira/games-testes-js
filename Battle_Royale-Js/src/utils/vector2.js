@@ -3,11 +3,9 @@ export default class Vector2{
         this._x = p_x;
         this._y = p_y;
     }
-    
-    zero(){
-        this._x = 0;
-        this._y = 0;
-    }
+
+    sum(vec){let _sum = new Vector2(this.x + vec.x, this.y + vec.y); return _sum}
+    scalar(num){let _mult = new Vector2(num * this.x, num * this.y); return _mult}
     // Getters
     get x(){return this._x;}
     get y(){return this._y;}

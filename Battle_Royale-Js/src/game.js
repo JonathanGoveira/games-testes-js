@@ -1,7 +1,6 @@
 import canvas_Singleton from "./canvas"
 import Player from "./objects/player"
-import keyboard_Singleton from "./inputs/keyboard.js"
-import mouse_Singleton from "./inputs/mouse"
+import backGround_Singleton from "./others/background";
 
 const player = new Player();
 (function Init(){
@@ -11,5 +10,6 @@ const player = new Player();
 function Loop(){
     
     canvas_Singleton.clear();
+    backGround_Singleton.render();
     canvas_Singleton.draw(player);
 }
