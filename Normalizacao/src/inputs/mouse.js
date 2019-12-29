@@ -1,6 +1,5 @@
 import Vector2 from "../utils/vector2";
 import math_Singleton from "../utils/math";
-import canvas from "../canvas";
 
 class Mouse_Singleton{
     constructor(){
@@ -11,13 +10,11 @@ class Mouse_Singleton{
     move(e){
 
         //canvas.offsetLeft e canvas.offsetTop não estão funcionando
-        this._position.x = e.clientX - canvas.canvas.offsetLeft
-        this._position.y = e.clientY - canvas.canvas.offsetTop
-        //console.log(canvas.canvas.offsetTop)
-        //console.log(canvas.canvas.offsetLeft)
+        this._position.x = e.clientX
+        this._position.y = e.clientY
     }
-    get x(){return this._position.x};
-    get y(){return this._position.y};
+    get x(){return math_Singleton.toNormalize(this._position.x, this._position.y).x}
+    get y(){return math_Singleton.toNormalize(this._position.x, this._position.y).y}
 }
 const mouse_Singleton = new Mouse_Singleton();
 

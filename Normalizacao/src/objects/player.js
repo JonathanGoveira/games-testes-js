@@ -1,22 +1,22 @@
 import Vector2 from "../utils/vector2"
-import canvas from "../canvas"
 import mouse_Singleton from "../inputs/mouse";
+import canvas from "../canvas";
 import keyboard_Singleton from "../inputs/keyboard";
 
 export default class Player{
     constructor(){
-        this._position = new Vector2(canvas.width /2 ,canvas.height /2);
+        this._position = new Vector2(0,0);
         this._distance = new Vector2(0,0);
         this._velocity = new Vector2(0,0);
         this._acceleration = new Vector2(0,0);
         this._angle = 0;
-        this._width = 40; this._height = 20;
-        this._pivot = new Vector2(this._width/2, this._height/2)
+        this._width = 0.02; this._height = 0.02;
         this._color = "deepskyblue"
         this._proporcao = canvas.width / canvas.height
-        this._friction = 0.01
+        this._friction = 0.001
         this._shot = []
     }
+    
 
     distanceX(){return (this._position.x - mouse_Singleton.x)}
     distanceY(){return (this._position.y - mouse_Singleton.y)}
@@ -29,10 +29,9 @@ export default class Player{
 
     input(){
         if(keyboard_Singleton.keyPress(65)){
-            this._acceleration.x = Math.cos(this.angle()) * 0.05
-            this._acceleration.y = Math.sin(this.angle()) * 0.05
+            this._acceleration.x = Math.cos(this.angle()) * 0.005
+            this._acceleration.y = Math.sin(this.angle()) * 0.005
         }else{this._acceleration.x = this._acceleration.y = 0}
-
     }
 
     physicsUpdate(){
@@ -40,8 +39,8 @@ export default class Player{
         this._velocity.y += this._acceleration.y;
 
         this.friction();
-        this._position.x += (this._velocity.x);
-        this._position.y += (this._velocity.y);
+        this._position.x += (this._velocity.x * 0.01);
+        this._position.y += (this._velocity.y * 0.01);
     }
 
     friction(){
@@ -53,24 +52,30 @@ export default class Player{
         this._velocity.y = Math.sin(angle) * speed;
     }
 
-    render(){
-        
-        canvas.context.translate(this.x, this.y)
-        canvas.context.rotate(this.angle())
-        canvas.context.fillStyle = this._color
-        canvas.context.fillRect(-this._pivot.x, -this._pivot.y, this.width, this.height)
-        
+    shot(){
+        if(keyboard_Singleton.keyPress(32)){
+            this._shot.push({x: this.x, y: this.y})
+        }
+        canvas.context.fillStyle = "salmon"
+        if(this._shot.length > 0){
+            this.drawShot();
+        }
     }
 
+    drawShot(){
+        //canvas.context.fillStyle = "salmon"
+        canvas.context.beginPath();
+        canvas.context.moveTo(this._shot[0].x, this._shot[0].y)
+        canvas.context.arc(this._shot[0].x, this._shot[0].y, 30,0, Math.PI * 2)
+        canvas.context.fill();
+    }
+    
     update(){
-        
         this.updateAngle();
         this.input();
         this.physicsUpdate();
+        this.shot();
     }
-
-    angle(){return this._angle}
-
     // Getters
     get x(){return this._position.x};
     get y(){return this._position.y};
@@ -82,6 +87,5 @@ export default class Player{
     set y(p_y){this._position.y = p_y};
     set width(p_w){this._width = p_w}
     set height(p_h){this._height = p_h}
-
-
+   
 }

@@ -3,19 +3,14 @@ import canvas from "../canvas";
 
 class Background{
     constructor(){
-        this._size = new Vector2(3000,3000)
+        this._size = new Vector2(2000,2000)
         this._stars = new Stars();
         this._stars.random(this);
         
     }
 
     render(){
-        canvas.context.fillStyle = "black";
-        
-        canvas.context.fillRect(0,0, this._size.x, this._size.y)
-
         canvas.context.fillStyle = "white"
-        
         canvas.context.beginPath();
         for(let i = 0; i < this._stars.length; i++){
             canvas.context.moveTo(this._stars.x[i], this._stars.y[i])

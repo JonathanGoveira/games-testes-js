@@ -1,128 +1,14 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<title>Normalização</title>
-	<script>
-		var canvas, context;
-		var texture;
-		var proporcao = 0
-		var rect = { 
-			x: 0, y: 0,
-			distanceX: 0, distanceY: 0,
-			velocityX: 0, velocitY: 0,
-			accelerationX: 0, accelerationY: 0,
-			angle: 0,
-			width: 0.02, height: 0.02, 
-			color: 'rgb(0,200,200)'
-		};
-		var screen = { x: 900, y: 600, AR: function () { return this.x / this.y } };
-		var screenCenter = { x: screen.x / 2, y: screen.y / 2 };
-		var pivot = { x: 0.0, y: 0.0 };
-		var scaleVec = { x: 0, y: 0.0 };
-		var transVec = { x: 0, y: 0.0 };
-		var mouse = {}
-		var keys = []
-		var player = {}
-		var friction = 0.001
-
-		function InitGame() {
-			canvas = document.getElementById('Canvas');
-			context = canvas.getContext('2d');
-			proporcao = canvas.width / canvas.height
-
-			setInterval(Loop, 1000 / 60);
-		}
-		// Função de desenho com o canvas normalizado
-		function DrawRect(rect) {
-			pivot.x = screen.x * rect.width / 2;
-			pivot.y = screen.y * rect.height / 2;
-			scaleVec.x = screen.x * rect.width;
-			scaleVec.y = screen.y * rect.height;
-			transVec.x = screenCenter.x + screenCenter.x * rect.x - (scaleVec.x / 2);
-			transVec.y = screenCenter.y + screenCenter.y * (-rect.y) - (scaleVec.y / 2);
-			context.save();
-			context.translate(pivot.x, pivot.y);
-			context.translate(transVec.x, transVec.y);
-			physics()
-			context.rotate(-rect.angle);
-			context.translate(-pivot.x, -pivot.y);
-			context.fillStyle = rect.color;
-			context.fillRect(0, 0, scaleVec.x, scaleVec.y);
-			context.restore();
-		}
-		// Função principal de fisica, onde aplica a aceleração
-		function physics() {
-			rect.velocityX += rect.accelerationX
-			rect.velocitY += rect.accelerationY
-			
-			applyFriction()
-			rect.x += (rect.velocityX * 0.01)
-			rect.y += (rect.velocitY * 0.01)
-		
-		}
-		// inputs do usuário
-		document.addEventListener('mousemove', function (e) {
-			mouse.x = e.clientX - canvas.offsetLeft
-			mouse.y = e.clientY - canvas.offsetTop
-		}, false);
-
-		document.addEventListener('keydown', function (e) {
-			keys[e.which] = true;
-		});
-		document.addEventListener('keyup', function (e) {
-			keys[e.which] = false;
-		});
-		// Função de fricção, onde indetifica se a velocidade é maior que a fricção, caso seja ele desacelera a velocidade, até chegar em zero
-		// e o objeto parar de se mover
-		function applyFriction() {
-			var speed = Math.sqrt(rect.velocityX * rect.velocityX + rect.velocitY * rect.velocitY)
-			var angle = Math.atan2(rect.velocitY, rect.velocityX);
-
-			if (speed > friction) {
-				// 1.5 é pra aumentar o valor da fricção e fazer o objeto freiar mais rapído
-				speed -= (friction * 1.5);
-			} else {
-				speed = 0;
-			}
-			// caso o speed seja 0, ou seja ele chegou no valor da fricção, então a velocidade recebe 0 tbm
-			rect.velocityX = Math.cos(angle) * speed;
-			rect.velocitY = Math.sin(angle) * speed;
-			
-		}
-		// Função para normalizar, usada nesse caso para normalizar as coordenadas do mouse
-		function toNormalize(p_coordX, p_coordY) {
-			let coord = {}
-			coord.x = (((p_coordX / canvas.width) * 2) - 1).toPrecision(10);
-			coord.y = (((p_coordY / - canvas.height + 1) * 2 - 1)).toPrecision(10);
-			return coord
-		}
-		// loop principal do jogo
-		function Loop() {
-			context.fillStyle = "black"
-			context.fillRect(0, 0, canvas.width, canvas.height)
-			
-			rect.distanceX = toNormalize(mouse.x, mouse.y).x
-			rect.distanceY = toNormalize(mouse.x, mouse.y).y
-			player.x = rect.x - rect.distanceX
-			player.y = rect.y - rect.distanceY
-
-			rect.angle = Math.atan2(-player.y, -player.x * proporcao)
-			if (keys[65]) {
-				rect.accelerationX = Math.cos(rect.angle) * 0.005
-				rect.accelerationY = Math.sin(rect.angle) * 0.005
-			} else { rect.accelerationX = rect.accelerationY = 0 }
-			DrawRect(rect);
-
-		}
-
-	</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Os Astecas de Havard Battle-Royale</title>
 </head>
-
-<body onload="InitGame()">
-	<canvas id="Canvas" width="900" height="600">
-		Seu canvas não é suportado.
-	</canvas>
-
+<body>
+    <canvas id="canvas" ></canvas>
+    <link rel="stylesheet" href="style.css">
+    <script type="text/JavaScript" src="./dist/bundle.js"></script>
 </body>
-
 </html>
