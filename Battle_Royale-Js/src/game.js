@@ -2,6 +2,7 @@ import canvas from "./canvas"
 import Player from "./objects/player"
 import backGround_Singleton from "./others/background";
 import camera from "./others/camera";
+import mouse_Singleton from "./inputs/mouse";
 
 let cv = document.getElementById('canvas')
 const player = new Player();
@@ -11,6 +12,7 @@ const player = new Player();
 }())
 
 function Loop(){
+    mouse_Singleton.update()
     canvas.clear();
     camera.update(player)
     canvas.context.save();

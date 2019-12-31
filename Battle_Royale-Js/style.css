@@ -4,4 +4,4 @@ canvas {
     color: salmon;
     
 }
-html, body {overflow: hidden;margin: 0;padding: 10;}
+html, body {margin: 0; padding: 0;}
