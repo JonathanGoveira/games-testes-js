@@ -25,12 +25,10 @@ export default class Player{
         this._angle = Math.atan2(-this.distanceY(), -this.distanceX() * this._proporcao)
     }
 
-    angle(){return this._angle}
-
     input(){
         if(keyboard_Singleton.keyPress(65)){
-            this._acceleration.x = Math.cos(this.angle()) * 0.05
-            this._acceleration.y = Math.sin(this.angle()) * 0.05
+            this._acceleration.x = Math.cos((this.angle()) * 0.05).toPrecision(10)
+            this._acceleration.y = Math.sin((this.angle()) * 0.05).toPrecision(10)
         }else{this._acceleration.x = this._acceleration.y = 0}
 
     }
@@ -66,7 +64,9 @@ export default class Player{
         
         this.updateAngle();
         this.input();
-        this.physicsUpdate();
+        this._position.x += 1
+        this._position.y += 1
+        //this.physicsUpdate();
     }
 
     angle(){return this._angle}

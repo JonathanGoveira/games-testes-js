@@ -10,13 +10,14 @@ class Mouse_Singleton{
     }
 
     move(e){
-        this._position.x = e.clientX - canvas.canvas.offsetLeft 
-        this._position.y = e.clientY - canvas.canvas.offsetTop
+        const bounds = canvas.canvas.getBoundingClientRect();
+        this._position.x = e.clientX - bounds.left 
+        this._position.y = e.clientY - bounds.top
         
     }
     update(){
-        this._position.x += Math.floor(camera.x)
-        this._position.y += Math.floor(camera.y)
+        this._position.x += Math.round(camera.x) 
+        this._position.y += Math.round(camera.y) 
     }
     get x(){return this._position.x};
     get y(){return this._position.y};
